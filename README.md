@@ -41,19 +41,27 @@ Hoặc trên Visual Studio: **File → Clone Repository** → dán link repo →
 
 ### Bước 3 — Sửa chuỗi kết nối (nếu cần)
 
-Mở `QuanLyTau/App.config`. Mặc định:
+**Chỉ sửa `QuanLyTau/App.config`** (không cần sửa `KetNoi_DuLieu.cs` nếu App.config đúng).
+
+Trong **XML / App.config** chỉ cần **một** dấu `\`:
 
 ```xml
-Data Source=.;Initial Catalog=QuanLyTau;Integrated Security=True
+connectionString="Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyTau;Integrated Security=True;TrustServerCertificate=True;Connect Timeout=15"
 ```
 
-Đổi `Data Source` cho khớp server bạn vừa kết nối trong SSMS:
+Trong **file .cs** mới phải viết `@"Data Source=.\SQLEXPRESS;..."` hoặc `"Data Source=.\\SQLEXPRESS;..."`.  
+Viết `"Data Source=.\SQLEXPRESS"` trong C# sẽ báo lỗi biên dịch — đó là bình thường.
 
-| SQL Server trên máy | Data Source |
+| SQL Server trên máy | Data Source trong App.config |
 |---|---|
-| Instance mặc định | `.` |
 | SQL Express | `.\SQLEXPRESS` |
+| Instance mặc định | `.` |
 | LocalDB | `(localdb)\MSSQLLocalDB` |
+
+Sau khi sửa App.config: **Build → Rebuild Solution**, rồi F5.  
+File thật lúc chạy là `QuanLyTau\bin\Debug\QuanLyTau.exe.config` — phải trùng với App.config.
+
+**Lỗi hay gặp:** chạy script SQL trên một server (ví dụ `.`) nhưng app trỏ `.\SQLEXPRESS`. Hai bên phải cùng một tên server như trong SSMS.
 
 ### Bước 4 — Chạy app
 

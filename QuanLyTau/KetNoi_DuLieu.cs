@@ -15,19 +15,52 @@ namespace QuanLyTau
     /// </summary>
     public class KetNoi_DuLieu
     {
+        // Fallback khi App.config chưa đọc được.
+        // Trong C#: dùng @"..." hoặc viết \\ — KHÔNG viết ".\SQLEXPRESS" trong chuỗi thường.
+        private const string ChuoiMacDinh =
+            @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyTau;Integrated Security=True;TrustServerCertificate=True;Connect Timeout=15";
+
         public static string LayChuoiKetNoi()
         {
             try
             {
                 ConnectionStringSettings muc = ConfigurationManager.ConnectionStrings["QuanLyTau"];
                 if (muc != null && !string.IsNullOrWhiteSpace(muc.ConnectionString))
-                    return muc.ConnectionString;
+                    return muc.ConnectionString.Trim();
             }
             catch (ConfigurationErrorsException)
             {
             }
 
-            return "Data Source=.;Initial Catalog=QuanLyTau;Integrated Security=True";
+            return ChuoiMacDinh;
+        }
+
+        /// <summary>Trả về Data Source đang dùng, để hiện trong thông báo lỗi.</summary>
+        public static string LayTenMayChu()
+        {
+            try
+            {
+                SqlConnectionStringBuilder bo = new SqlConnectionStringBuilder(LayChuoiKetNoi());
+                return bo.DataSource;
+            }
+            catch
+            {
+                return "(không đọc được)";
+            }
+        }
+
+        public static void KiemTraKetNoi()
+        {
+            using (SqlConnection ketNoi = TaoKetNoi())
+            {
+                ketNoi.Open();
+                using (SqlCommand lenh = new SqlCommand("SELECT DB_NAME()", ketNoi))
+                {
+                    object tenDb = lenh.ExecuteScalar();
+                    if (tenDb == null || !string.Equals(tenDb.ToString(), "QuanLyTau", StringComparison.OrdinalIgnoreCase))
+                        throw new InvalidOperationException("Đã kết nối SQL nhưng database hiện tại không phải QuanLyTau.");
+                }
+            }
         }
 
         public static SqlConnection TaoKetNoi()

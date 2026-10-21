@@ -53,7 +53,14 @@ namespace QuanLyTau
             {
                 lblLoi.Text = "Không kết nối được SQL Server.";
                 MessageBox.Show(
-                    ex.Message + "\n\nHãy chạy Database/QuanLyTau.sql trong SSMS và kiểm tra App.config.",
+                    ex.Message
+                    + "\n\nĐang kết nối tới: " + KetNoi_DuLieu.LayTenMayChu()
+                    + "\nDatabase: QuanLyTau"
+                    + "\n\nKiểm tra:\n"
+                    + "1) SSMS kết nối cùng server (thường .\\SQLEXPRESS), chạy Database/QuanLyTau.sql (Execute).\n"
+                    + "2) Sửa QuanLyTau/App.config → connectionStrings (trong XML chỉ cần .\\SQLEXPRESS một dấu \\).\n"
+                    + "3) Visual Studio: Build → Rebuild Solution, rồi F5 lại.\n"
+                    + "4) Services.msc: SQL Server (SQLEXPRESS) đang Running.",
                     "Lỗi kết nối",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

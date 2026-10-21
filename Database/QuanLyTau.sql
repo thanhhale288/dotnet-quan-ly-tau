@@ -1,10 +1,20 @@
 /*
     QuanLyTau.sql
     Database quan ly tau dien ngam cho bai .NET Windows Forms.
-    Chay toan bo script nay trong SSMS (file -> Open -> Execute).
+    Chay toan bo script nay trong SSMS (File -> Open -> Execute).
+
+    QUAN TRONG — phai chay script tren DUNG instance ma App.config dang tro toi:
+      - Neu App.config: Data Source=.\SQLEXPRESS
+        thi trong SSMS ket noi Server name: .\SQLEXPRESS (hoac localhost\SQLEXPRESS)
+      - Neu App.config: Data Source=.
+        thi trong SSMS ket noi Server name: . (hoac ten may)
 
     Script xoa database QuanLyTau neu da ton tai, roi tao lai tu dau.
     Dong cac cua so query khac dang dung QuanLyTau truoc khi chay.
+
+    Sau khi Execute thanh cong, Object Explorer se thay database QuanLyTau.
+    App.config (XML) dung MOT dau \ : Data Source=.\SQLEXPRESS
+    Trong file .cs moi can @"Data Source=.\SQLEXPRESS" hoac "Data Source=.\\SQLEXPRESS".
 
     Tai khoan dang nhap (mat khau goc, app bam SHA-256 roi moi so sanh):
         admin    / 123456    Quan ly
